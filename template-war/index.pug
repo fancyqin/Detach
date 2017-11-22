@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    head
+        title pug
+    body
+        h2 engine: #{engine}
+        ul
+            each item,index in items
+                li
+                    table(width="100%",border="1",cellspacing="0",cellpadding="0")
+                        tr
+                            th(width='5%') Index
+                            th(width='10%') ID
+                            th(width='15%') Name
+                            th(width='10%') Stars
+                            th(width='10%') Forks
+                            th Description
+                        tr
+                            td=  index+1
+                            td= item.id
+                            td
+                                a(href=item.html_url)= item.name
+                            td= item.stargazers_count
+                            td= item.forks
+                            td= item.description
