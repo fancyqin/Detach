@@ -1,9 +1,10 @@
 doctype html
 html(lang="en")
     head
-        title pug
+        title= engine
     body
         h2 engine: #{engine}
+        h3= xss
         ul
             each item,index in items
                 li

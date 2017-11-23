@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>doT</title>
+    <title>{{= it.engine }}</title>
 </head>
 <body>
 <h2>engine: {{= it.engine }}</h2>
-
+<h3>{{! it.xss}}</h3>
 <ul>
     {{~it.items :value:index}}
         <li>
