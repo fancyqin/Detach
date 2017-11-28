@@ -77,6 +77,8 @@ engine_route('/art','index.art','art-template');
 engine_route('/ejs','index.ejs','ejs');
 engine_route('/dot','index.jst','doT');
 engine_route('/pug','index.pug','pug');
+
+engine_route('/test','index.ddd','test');
 //engine_route('/dust','index.dust','dust.js');
 
 app.listen(3000, ()=> {

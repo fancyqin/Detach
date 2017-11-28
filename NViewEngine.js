@@ -9,6 +9,7 @@ const dot = require('dot');
 const NViewEngine = {
     config:{
         charset:'utf-8',
+        defaultEngine:'ejs',
         ext:{
             html:'ejs',
             ejs:'ejs',
@@ -48,19 +49,19 @@ const NViewEngine = {
         try{
             return fs.readFileSync(fileURI, this.config.charset);
         }catch(e) {
-            return '路径error'
+            return '路径error，找不到文件'
         }
     },
     getFileExtName(fileURI){
         try {
             return path.extname(fileURI).split('.')[1]
         }catch (e){
-            return '路径error'
+            return '路径error，文件扩展名错误'
         }
     },
     compileByUri(fileURI,data){
         const extName = this.getFileExtName(fileURI);
-        const type = this.config.ext[extName.toLowerCase()];
+        const type = this.config.ext[extName.toLowerCase()] || this.config.defaultEngine ;
         const str  = this.getFileStr(fileURI);
         return this.compile(type,str,data);
     }
