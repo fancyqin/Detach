@@ -13,6 +13,8 @@
     "dustjs-linkedin": "^2.7.5",
     "ejs": "^2.5.7",
     "express-art-template": "^1.0.0",
+    "handlebars": "^4.0.11",
+    "lodash": "^4.17.4",
     "pug": "^2.0.0-rc.4",
     "swig": "^1.4.2",
     "swig-templates": "^2.0.2"
