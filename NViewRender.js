@@ -9,28 +9,12 @@ const ejs = require('ejs');
 const dot = require('dot');
 const handlebars = require('handlebars');
 
-const defaults = {
-    charset:'utf-8',
-    defaultEngine:'ejs',
-    ext:{
-        html:'ejs',
-        ejs:'ejs',
-        dot:'dot',
-        jst:'dot',
-        pug:'pug',
-        jade:'pug',
-        art:'art',
-        'handlebars':'handlebars'
-    },
-    application:'vo',
-    path:'/vo/view'
-};
+
+const defaults =  JSON.parse(fs.readFileSync(__dirname+'/nviewRenderConfig.json'));
 
 class NViewEngine {
     constructor(config){
         this.config =  _.defaults(config,defaults);
-        this.config.path = 'wrwr'
-
     }
     compileByType(tplType,str,data){
         let htmlString;
@@ -61,50 +45,40 @@ class NViewEngine {
         }
         return htmlString;
     }
+    getFileUri(page,compileConfig){
+        const extName = path.extname(compileConfig.path + page);
+        let fileURI;
+
+        if(extName === ''){
+            fileURI = compileConfig.path+ page +'.'+ compileConfig.defaultEngine;
+        }else if(extName === '.'){
+            fileURI = compileConfig.path+ page + compileConfig.defaultEngine;
+        }else{
+            fileURI = compileConfig.path+ page
+        }
+        return fileURI;
+    }
     getFileStr(fileURI){
         try{
             return fs.readFileSync(fileURI, this.config.charset);
         }catch(e) {
-            return '路径error，找不到文件'
+            throw '路径error，找不到文件: ' + fileURI
         }
     }
 
-    getFileExtName(fileURI){
-        try {
-            return path.extname(fileURI).split('.')[1]
-        }catch (e){
-            return '路径error，文件扩展名错误'
-        }
-    }
-    compileByUri(data,fileURI,config){
-        const compileConfig = config ? _.defaults(config,this.cofing):this.config;
-
+    compileByUri(data,page,config){
+        const compileConfig = config ? _.defaults(config,this.config):this.config;
+        const fileURI  = this.getFileUri(page,compileConfig);
         const extName = path.extname(fileURI);
+        const str = this.getFileStr(fileURI);
 
-        if(extName === ''){
-            fileURI = fileURI +'.'+ compileConfig.defaultEngine;
-        }else if(extName === '.'){
-            fileURI = fileURI + compileConfig.defaultEngine;
-        }
+        const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
 
-
-
-        const str  = this.getFileStr(fileURI);
-
-        const type = this.config.ext[extName.toLowerCase()] || this.config.defaultEngine ;
         try {
             return this.compileByType(type,str,data);
         }catch (e){
-            return '模板渲染错误'
+            throw '模板渲染错误'
         }
-
-    }
-
-    getfilePath(name){
-        return this.config.path +'/'+name
-    }
-    complleByName(name,data){
-
     }
 
 }
