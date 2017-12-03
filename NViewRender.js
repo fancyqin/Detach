@@ -77,7 +77,7 @@ class NViewEngine {
         try {
             return this.compileByType(type,str,data);
         }catch (e){
-            throw '模板渲染错误'
+            throw type + '模板渲染错误'
         }
     }
 
