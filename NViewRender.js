@@ -74,11 +74,13 @@ class NViewEngine {
 
         const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
 
-        try {
-            return this.compileByType(type,str,data);
-        }catch (e){
-            throw type + '模板渲染错误'
-        }
+        return new Promise((resolve, reject) =>{
+            try{
+                resolve(this.compileByType(type,str,data),compileConfig)
+            }catch(e){
+                reject(e);
+            }
+        })
     }
 
 }
