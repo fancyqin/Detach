@@ -33,9 +33,11 @@ try {
 }
 
 
-var ee = new NViewRender();
+let ee = new NViewRender();
 
-console.log(ee.compileByUri(data,'/detail.jst'));
+let d = '{"module":"home","springVersion":"5.0.0.RELEASE","username":"test"}';
+
+console.log(ee.compileByUri(d,'/detail.jst'));
 
 
 

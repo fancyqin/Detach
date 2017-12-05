@@ -19,7 +19,7 @@ class NViewRender {
     compileByType(tplType,str,data){
         let htmlString;
         if(!tplType||!str||!data){
-            return false
+            return ''
         }
         switch (tplType.toLowerCase()){
             case 'ejs':
@@ -70,26 +70,30 @@ class NViewRender {
         const compileConfig = config ? _.defaults(config,this.config):this.config;
         const fileURI  = this.getFileUri(page,compileConfig);
         const extName = path.extname(fileURI);
+        let str,type,dataModel;
+        const setParam = () =>{
+            str = this.getFileStr(fileURI);
+            type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
+            dataModel = Object.prototype.toString.call(data) === '[object Object]' ? data : JSON.parse(data);
+        };
         if(compileConfig.async){
             return new Promise((resolve, reject) =>{
                 try{
-                    const str = this.getFileStr(fileURI);
-                    const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
-                    resolve(this.compileByType(type,str,data));
+                    setParam();
+                    resolve(this.compileByType(type,str,dataModel));
                 }catch(e){
                     reject(e);
                 }
             })
         }else{
-            const str = this.getFileStr(fileURI);
-            const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
-            return this.compileByType(type,str,data);
+            setParam();
+            return this.compileByType(type,str,dataModel);
         }
 
     }
 
 }
 
-
+//todo beforeRender/afterRender callback  /param fixed / return fixed / error
 
 module.exports = NViewRender;
