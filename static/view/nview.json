@@ -1,4 +1,4 @@
 {
   "defaultEngine":"pug",
-  "path":"/work/node/Detach/static/view"
+  "path":"../../Detach/static/view"
 }

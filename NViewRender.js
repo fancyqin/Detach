@@ -70,13 +70,11 @@ class NViewEngine {
         const compileConfig = config ? _.defaults(config,this.config):this.config;
         const fileURI  = this.getFileUri(page,compileConfig);
         const extName = path.extname(fileURI);
-        const str = this.getFileStr(fileURI);
-
-        const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
-
         return new Promise((resolve, reject) =>{
             try{
-                resolve(this.compileByType(type,str,data),compileConfig)
+                const str = this.getFileStr(fileURI);
+                const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
+                resolve(this.compileByType(type,str,data))
             }catch(e){
                 reject(e);
             }

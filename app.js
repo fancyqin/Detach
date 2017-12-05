@@ -5,7 +5,7 @@ const app = express();
 
 const NViewRender = require('./NViewRender.js');
 const engine = new NViewRender({
-    defaultEngine:'dot'
+    path:__dirname + '/template-war/'
 });
 
 const data = JSON.parse(fs.readFileSync(__dirname+'/data/repositories.json'));
@@ -14,7 +14,7 @@ const engine_route = (route,file,name) => {
     app.get(route, (req, res) => {
         data.engine = name;
         data.xss = '<script>alert(1)</script>';
-        res.send(engine.compileByUri(data,'/template-war/'+file))
+        res.send(engine.compileByUri(data,file))
     });
 };
 

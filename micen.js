@@ -11,11 +11,11 @@ const micenRender = new NViewRender(micenRenderConfig);
 const test = (page,config) => {
 
 
-    micenRender.compileByUri(data,page,config).then(data => {
-        console.log(data)
+    micenRender.compileByUri(data,page,config).then(result => {
+        console.log(result)
     }).catch(e => {
         console.error(e)
-    })
+    });
     // try{
     //     console.log(micenRender.compileByUri(data,page,config));
     // }catch (e){
@@ -23,14 +23,9 @@ const test = (page,config) => {
     // }
 };
 
-micenRender.compileByUri(data,'/page/home.jd').then(data => {
-    console.log(data)
-}).catch(e => {
-    console.error(e)
-})
 
 
-test('/page/home.jd');
+test('/page/home');
 
 test('/page/productList',{defaultEngine:'ejs'});
 
