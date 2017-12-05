@@ -11,23 +11,23 @@ const micenRender = new NViewRender(micenRenderConfig);
 
 //example
 
-//默认异步
-micenRender.compileByUri(data,'/page/home').then(result => {
+//异步写法
+micenRender.compileByUri(data,'/page/home',{async:true}).then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
 
-micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
+micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs',async:true}).then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
 
 
-//同步写法
+//默认同步
 try {
-    console.log(micenRender.compileByUri(data,'/page/detail.jst',{async:false}));
+    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
 }catch (e){
     console.error(e);
 }
