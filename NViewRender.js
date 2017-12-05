@@ -12,7 +12,7 @@ const handlebars = require('handlebars');
 
 const defaults =  JSON.parse(fs.readFileSync(__dirname+'/nviewRenderConfig.json'));
 
-class NViewEngine {
+class NViewRender {
     constructor(config){
         this.config =  _.defaults(config,defaults);
     }
@@ -62,7 +62,7 @@ class NViewEngine {
         try{
             return fs.readFileSync(fileURI, this.config.charset);
         }catch(e) {
-            throw '路径error，找不到文件: ' + fileURI
+            throw 'Path Error,Cannot find file : ' + fileURI;
         }
     }
 
@@ -70,19 +70,26 @@ class NViewEngine {
         const compileConfig = config ? _.defaults(config,this.config):this.config;
         const fileURI  = this.getFileUri(page,compileConfig);
         const extName = path.extname(fileURI);
-        return new Promise((resolve, reject) =>{
-            try{
-                const str = this.getFileStr(fileURI);
-                const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
-                resolve(this.compileByType(type,str,data))
-            }catch(e){
-                reject(e);
-            }
-        })
+        if(compileConfig.async){
+            return new Promise((resolve, reject) =>{
+                try{
+                    const str = this.getFileStr(fileURI);
+                    const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
+                    resolve(this.compileByType(type,str,data));
+                }catch(e){
+                    reject(e);
+                }
+            })
+        }else{
+            const str = this.getFileStr(fileURI);
+            const type = compileConfig.ext[extName.split('.')[1].toLowerCase()] || compileConfig.defaultEngine;
+            return this.compileByType(type,str,data);
+        }
+
     }
 
 }
 
 
 
-module.exports = NViewEngine;
+module.exports = NViewRender;

@@ -8,28 +8,30 @@ const micenRenderConfig = JSON.parse(fs.readFileSync(__dirname+'/static/view/nvi
 
 const micenRender = new NViewRender(micenRenderConfig);
 
-const test = (page,config) => {
+
+//example
+
+//默认异步
+micenRender.compileByUri(data,'/page/home').then(result => {
+    console.log(result)
+}).catch(e => {
+    console.error(e)
+});
+
+micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
+    console.log(result)
+}).catch(e => {
+    console.error(e)
+});
 
 
-    micenRender.compileByUri(data,page,config).then(result => {
-        console.log(result)
-    }).catch(e => {
-        console.error(e)
-    });
-    // try{
-    //     console.log(micenRender.compileByUri(data,page,config));
-    // }catch (e){
-    //     console.error(e);
-    // }
-};
+//同步写法
+try {
+    console.log(micenRender.compileByUri(data,'/page/detail.jst',{async:false}));
+}catch (e){
+    console.error(e);
+}
 
-
-
-test('/page/home');
-
-test('/page/productList',{defaultEngine:'ejs'});
-
-test('/page/detail.jst');
 
 
 
