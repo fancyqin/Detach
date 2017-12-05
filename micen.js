@@ -33,6 +33,10 @@ try {
 }
 
 
+var ee = new NViewRender();
+
+console.log(ee.compileByUri(data,'/detail.jst'));
+
 
 
 
