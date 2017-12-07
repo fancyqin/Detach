@@ -27,17 +27,17 @@ micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs',async:tru
 
 //默认同步
 try {
-    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
+    console.log(micenRender.compileByUri({},'/page/productList.ejs'));
 }catch (e){
     console.error(e);
 }
 
 
-let ee = new NViewRender();
-
-let d = '{"module":"home","springVersion":"5.0.0.RELEASE","username":"test"}';
-
-console.log(ee.compileByUri(d,'/detail.jst'));
+//let ee = new NViewRender();
+//
+//let d = '{"module":"home","springVersion":"5.0.0.RELEASE","username":"test"}';
+//
+//console.log(ee.compileByUri(d,'/detail.jst'));
 
 
 
