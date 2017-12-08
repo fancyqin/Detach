@@ -8,8 +8,21 @@ const micenRenderConfig = JSON.parse(fs.readFileSync(__dirname+'/static/view/nvi
 
 const micenRender = new NViewRender(micenRenderConfig);
 
-
+micenRender.beforeRender = function(type,str,data){
+    console.log('beforeRender : '+ type,str)
+};
 //example
+
+
+
+
+//默认同步
+try {
+    console.log(micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs',async:true}));
+    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
+}catch (e){
+    console.error(e);
+}
 
 //异步写法
 micenRender.compileByUri(data,'/page/home',{async:true}).then(result => {
@@ -17,33 +30,5 @@ micenRender.compileByUri(data,'/page/home',{async:true}).then(result => {
 }).catch(e => {
     console.error(e)
 });
-
-micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs',async:true}).then(result => {
-    console.log(result)
-}).catch(e => {
-    console.error(e)
-});
-
-
-//默认同步
-try {
-    console.log(micenRender.compileByUri({},'/page/productList.ejs'));
-}catch (e){
-    console.error(e);
-}
-
-
-//let ee = new NViewRender();
-//
-//let d = '{"module":"home","springVersion":"5.0.0.RELEASE","username":"test"}';
-//
-//console.log(ee.compileByUri(d,'/detail.jst'));
-
-
-
-
-
-
-
 
 

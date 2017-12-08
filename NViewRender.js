@@ -35,6 +35,7 @@ class NViewRender {
         this.config =  _.defaults(config,defaults);
     }
     compileByType(tplType,str,data){
+        this.beforeRender(tplType,str,data);
         let htmlString;
         if(!tplType||!str||!data){
             return ''
@@ -61,6 +62,7 @@ class NViewRender {
                 htmlString = ejs.render(str,data);
                 break;
         }
+        this.afterRender(htmlString);
         return htmlString;
     }
     _getFileUri(page,compileConfig){
@@ -126,8 +128,12 @@ class NViewRender {
 
     }
 
+    //callBack
+    beforeRender(tplType,str,data){}
+    afterRender(htmlString){}
+
 }
 
-//todo beforeRender/afterRender callback  /param fixed / return fixed / error
+//todo beforeRender/afterRender callback
 
 module.exports = NViewRender;
