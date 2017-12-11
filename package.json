@@ -1,8 +1,8 @@
 {
-  "name": "detach",
-  "version": "1.0.0",
+  "name": "niew-render",
+  "version": "0.0.3",
   "description": "",
-  "main": "index.js",
+  "main": "NViewRender.js",
   "dependencies": {
     "art-template": "^4.12.2",
     "dot": "^1.1.2",
@@ -19,9 +19,6 @@
     "express-art-template": "^1.0.0",
     "swig-templates": "^2.0.2"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "author": "qinfan",
   "license": "ISC"
 }

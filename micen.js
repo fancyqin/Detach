@@ -11,6 +11,9 @@ const micenRender = new NViewRender(micenRenderConfig);
 micenRender.beforeRender = function(type,str,data){
     console.log('beforeRender : '+ type,str)
 };
+micenRender.afterRender = function(htmlString){
+    console.log('afterRender : '+ htmlString)
+};
 //example
 
 
