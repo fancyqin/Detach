@@ -8,30 +8,31 @@ const micenRenderConfig = JSON.parse(fs.readFileSync(__dirname+'/static/view/nvi
 
 const micenRender = new NViewRender(micenRenderConfig);
 
-micenRender.beforeRender = function(type,str,data){
-    console.log('beforeRender : '+ type,str)
+micenRender.beforeEngineCompile = function(type,str,data){
+    data.total_count = 123456789;
+
+    return {type,str,data}
 };
-micenRender.afterRender = function(htmlString){
-    console.log('afterRender : '+ htmlString)
+micenRender.afterEngineCompile = function(htmlString){
+    return htmlString + 'hahhahahah';
 };
 //example
 
 
 
 
-//默认同步
-try {
-    console.log(micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs',async:true}));
-    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
-}catch (e){
-    console.error(e);
-}
 
 //异步写法
-micenRender.compileByUri(data,'/page/home',{async:true}).then(result => {
+micenRender.compileByUri(data,'/page/home','faf').then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
 
-
+//默认同步
+try {
+    console.log(micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}));
+    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
+}catch (e){
+    console.error(e);
+}

@@ -11,15 +11,16 @@ const handlebars = require('handlebars');
 
 /****
 error Code table
-    100: Page should be a String
+    100: Page error, Should be a String
     200: Path Error,Cannot find file
     300: Data error, It\'s not a JSON or Cannot be parsed to JSON
-    400: Compile Error
+    400: Config error, Should be a Object
+    500: Compile Error
 *****/
 
 const defaults =  JSON.parse(fs.readFileSync(__dirname+'/nviewRenderConfig.json'));
 
-class NVError {
+class NViewRenderError {
     constructor(code,msg,e){
         this.code = code;
         this.msg = msg;
@@ -31,11 +32,18 @@ class NVError {
 
 
 class NViewRender {
+    _isObject(data){
+        return Object.prototype.toString.call(data).toLowerCase() === '[object object]'
+    }
     constructor(config){
         this.config =  _.defaults(config,defaults);
     }
     compileByType(tplType,str,data){
-        this.beforeRender(tplType,str,data);
+        const compileParams = {tplType,str,data};
+        const compileObj = _.defaults(this.beforeEngineCompile(tplType,str,data),compileParams);
+        tplType = compileObj.tplType;
+        str = compileObj.str;
+        data = compileObj.data;
         let htmlString;
         if(!tplType||!str||!data){
             return ''
@@ -62,12 +70,12 @@ class NViewRender {
                 htmlString = ejs.render(str,data);
                 break;
         }
-        this.afterRender(htmlString);
+        htmlString = this.afterEngineCompile(htmlString);
         return htmlString;
     }
     _getFileUri(page,compileConfig){
         if(typeof page !== 'string' ){
-            throw new NVError(100,'Page should be a String');
+            throw new NViewRenderError(100,'Page should be a String');
         }
         const extName = path.extname(compileConfig.path + page);
         let fileURI;
@@ -85,7 +93,7 @@ class NViewRender {
         try{
             return fs.readFileSync(fileURI, this.config.charset);
         }catch(e) {
-            throw new NVError(200,'Path Error,Cannot find file : ' + fileURI,e);
+            throw new NViewRenderError(200,'Path Error,Cannot find file : ' + fileURI,e);
         }
     }
     _getEngineType(fileURI,compileConfig){
@@ -94,13 +102,16 @@ class NViewRender {
     }
     _getDataModel(data){
         try{
-            return Object.prototype.toString.call(data) === '[object Object]' ? data : JSON.parse(data);
+            return this._isObject(data) ? data : JSON.parse(data);
         }catch (e){
-            throw new NVError(300,'Data error, It\'s not a JSON or Cannot be parsed to JSON',e);
+            throw new NViewRenderError(300,'Data error, It\'s not a JSON or Cannot be parsed to JSON',e);
         }
     }
     compileByUri(data,page,config){
-        const compileConfig = config ? _.defaults(config,this.config):this.config;
+        if(config && !this._isObject(config)){
+            throw new NViewRenderError(400,'Config error, Should be a Object')
+        }
+        const compileConfig = config? _.defaults(config,this.config):this.config;
         const fileURI  = this._getFileUri(page,compileConfig);
         let str,type,dataModel;
         const setParam = () =>{
@@ -122,15 +133,19 @@ class NViewRender {
             try{
                 return this.compileByType(type,str,dataModel);
             }catch (e){
-                throw new NVError(400,'Compile Error',e)
+                throw new NViewRenderError(500,'Compile Error',e)
             }
         }
 
     }
 
     //callBack
-    beforeRender(tplType,str,data){}
-    afterRender(htmlString){}
+    beforeEngineCompile(tplType,str,data){
+        return {tplType,str,data}
+    }
+    afterEngineCompile(htmlString){
+        return htmlString;
+    }
 
 }
 
