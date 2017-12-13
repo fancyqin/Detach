@@ -4,14 +4,13 @@ const NViewRender = require('./NViewRender.js');
 const data = JSON.parse(fs.readFileSync(__dirname+'/data/repositories.json'));
 
 //micen配置
-const micenRenderConfig = JSON.parse(fs.readFileSync(__dirname+'/static/view/nview.json'));
+const micenRenderConfig = {defaultEngine:'pug',path:'F:\\Detach/static/view'};
 
 const micenRender = new NViewRender(micenRenderConfig);
 
 micenRender.beforeEngineCompile = function(type,str,data){
     data.total_count = 123456789;
 
-    return {type,str,data}
 };
 micenRender.afterEngineCompile = function(htmlString){
     return htmlString + 'hahhahahah';

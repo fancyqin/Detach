@@ -5,28 +5,8 @@
 ```
 const NViewRender = require('nview-render');
 ```
-### Create Instance
 
-```
-//实例默认配置
-const micenRenderConfig = JSON.parse(fs.readFileSync(__dirname+'/static/view/nview.json'));
-
-const micenRender = new NViewRender(micenRenderConfig);
-
-```
-
-### CompileByUri(data,page,[config])
-
-#### Params
-
-`data` : `{JSON}` || `{String}`     `String`可以`parse`为`JSON`
-
-`page` : `{path}[.{extname}]`
-
-路径拼合： `config.path` +`page` + `'.'` + `[config.defaultEngine]`  
-或者      `config.path` + `page`
-    
-`config` : `{Object}`
+### Config
 
 默认配置：
 ```
@@ -45,11 +25,43 @@ const micenRender = new NViewRender(micenRenderConfig);
   },
   "application":"vo",     //暂不用
   "version":"1.0.0",      //暂不用
-  "path":"view"           //view文件根目录   
+  "path":"view"           //view文件根目录(绝对路径)  
 }
 
+```
+
+
+
+### Create Instance
 
 ```
+//创建实例默认配置
+
+//例
+
+const micenRenderConfig = {
+    defaultEngine:'pug',
+    path:'F:\\mstatic/micen/view'
+}
+
+const micenRender = new NViewRender(micenRenderConfig);
+
+```
+
+### CompileByUri(data,page,[config])
+
+#### Params
+
+`data` : `{JSON}` || `{String}`     `String`可以`parse`为`JSON`
+
+`page` : `{path}[.{extname}]`
+
+路径拼合： `config.path` +`page` + `'.'` + `[config.defaultEngine]`  
+或者      `config.path` + `page`
+    
+`config` : `{Object}`
+
+同上`Config` 格式
     
 #### Return
 

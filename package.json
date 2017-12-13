@@ -1,6 +1,6 @@
 {
   "name": "niew-render",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "niew-render package",
   "main": "NViewRender.js",
   "dependencies": {
