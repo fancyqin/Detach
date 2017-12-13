@@ -1,7 +1,7 @@
 {
-  "name": "niew-render",
-  "version": "0.0.6",
-  "description": "niew-render package",
+  "name": "nview-render",
+  "version": "0.0.1",
+  "description": "nview-render package",
   "main": "NViewRender.js",
   "dependencies": {
     "art-template": "^4.12.2",
@@ -14,8 +14,8 @@
     "swig": "^1.4.2"
   },
   "devDependencies": {
-    "express": "^4.16.2",
     "consolidate": "^0.15.0",
+    "express": "^4.16.2",
     "express-art-template": "^1.0.0",
     "swig-templates": "^2.0.2"
   },
