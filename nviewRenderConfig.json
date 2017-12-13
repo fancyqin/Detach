@@ -13,6 +13,5 @@
   },
   "application":"vo",
   "version":"1.0.0",
-  "path":"view",
-  "async": false
+  "path":"view"
 }

@@ -22,17 +22,17 @@ micenRender.afterEngineCompile = function(htmlString){
 
 
 
-//异步写法
+//异步
 micenRender.compileByUri(data,'/page/home','faf').then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
 
-//默认同步
+//同步
 try {
-    console.log(micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}));
-    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
+    console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
+    console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
 }catch (e){
     console.error(e);
 }

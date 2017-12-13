@@ -108,36 +108,30 @@ class NViewRender {
         }
     }
     compileByUri(data,page,config){
+        return new Promise((resolve, reject) =>{
+            try{
+                resolve(this.compileByUriSync(data,page,config))
+            }catch(e){
+                reject(e);
+            }
+        });
+    }
+    compileByUriSync(data,page,config){
         if(config && !this._isObject(config)){
             throw new NViewRenderError(400,'Config error, Should be a Object')
         }
         const compileConfig = config? _.defaults(config,this.config):this.config;
         const fileURI  = this._getFileUri(page,compileConfig);
-        let str,type,dataModel;
-        const setParam = () =>{
-            str = this._getFileStr(fileURI);
-            type = this._getEngineType(fileURI,compileConfig);
-            dataModel = this._getDataModel(data);
-        };
-        if(compileConfig.async){
-            return new Promise((resolve, reject) =>{
-                try{
-                    setParam();
-                    resolve(this.compileByType(type,str,dataModel));
-                }catch(e){
-                    reject(e);
-                }
-            })
-        }else{
-            setParam();
-            try{
-                return this.compileByType(type,str,dataModel);
-            }catch (e){
-                throw new NViewRenderError(500,'Compile Error',e)
-            }
+        const str = this._getFileStr(fileURI);
+        const type = this._getEngineType(fileURI,compileConfig);
+        const dataModel = this._getDataModel(data);
+        try{
+            return this.compileByType(type,str,dataModel);
+        }catch (e){
+            throw new NViewRenderError(500,'Compile Error',e)
         }
-
     }
+
 
     //callBack
     beforeEngineCompile(tplType,str,data){

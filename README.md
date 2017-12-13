@@ -17,6 +17,8 @@ const micenRender = new NViewRender(micenRenderConfig);
 
 ### CompileByUri(data,page,[config])
 
+#### Params
+
 `data` : `{JSON}` || `{String}`     `String`可以`parse`为`JSON`
 
 `page` : `{path}[.{extname}]`
@@ -43,30 +45,36 @@ const micenRender = new NViewRender(micenRenderConfig);
   },
   "application":"vo",     //暂不用
   "version":"1.0.0",      //暂不用
-  "path":"view",          //view文件根目录   
-  "async": false          //默认同步
+  "path":"view"           //view文件根目录   
 }
 
 
 ```
     
+#### Return
 
+`{String}` HTML
+
+
+#### Use
 
 ```
-//默认同步
-try {
-    console.log(micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}));
-    console.log(micenRender.compileByUri(data,'/page/detail.jst'));
-}catch (e){
-    console.error(e);
-}
-
-//异步写法
-micenRender.compileByUri(data,'/page/home',{async:true}).then(result => {
+//默认异步
+micenRender.compileByUri(data,'/page/home').then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
+
+//同步写法
+try {
+    console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
+    console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
+}catch (e){
+    console.error(e);
+}
+
+
 
 ```
 
@@ -91,7 +99,9 @@ micenRender.afterRender = function(htmlString){
 
 ### catch error
 
-{code,msg,[e]}
+`NViewRenderError{Object}`
+
+`{code,msg,[e]}`
 
 code对应:
 
