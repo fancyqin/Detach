@@ -1,7 +1,7 @@
 {
   "name": "niew-render",
-  "version": "0.0.4",
-  "description": "",
+  "version": "0.0.5",
+  "description": "niew-render package",
   "main": "NViewRender.js",
   "dependencies": {
     "art-template": "^4.12.2",

@@ -23,11 +23,13 @@ micenRender.afterEngineCompile = function(htmlString){
 
 
 //异步
-micenRender.compileByUri(data,'/page/home','faf').then(result => {
+micenRender.compileByUri(data,'/page/home').then(result => {
     console.log(result)
 }).catch(e => {
     console.error(e)
 });
+
+
 
 //同步
 try {

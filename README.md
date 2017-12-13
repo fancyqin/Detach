@@ -53,7 +53,9 @@ const micenRender = new NViewRender(micenRenderConfig);
     
 #### Return
 
-`{String}` HTML
+`{Promise}` reslove(data)
+
+data `{String}` HTML
 
 
 #### Use
@@ -66,6 +68,21 @@ micenRender.compileByUri(data,'/page/home').then(result => {
     console.error(e)
 });
 
+```
+
+### compileByUriSync(data,page,[config])
+
+#### Params
+
+同上
+
+#### Return
+
+`{String}` HTML
+
+#### Use
+
+```
 //同步写法
 try {
     console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
@@ -74,10 +91,7 @@ try {
     console.error(e);
 }
 
-
-
 ```
-
 
 ### Callback
 ```
@@ -103,9 +117,10 @@ micenRender.afterRender = function(htmlString){
 
 `{code,msg,[e]}`
 
-code对应:
+code对应msg:
 
 - 100: Page should be a String
 - 200: Path Error,Cannot find file
 - 300: Data error, It\'s not a JSON or Cannot be parsed to JSON
 - 400: Config error, Should be a Object
+- 500: Compile Error

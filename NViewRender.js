@@ -143,6 +143,5 @@ class NViewRender {
 
 }
 
-//todo beforeRender/afterRender callback
 
 module.exports = NViewRender;
