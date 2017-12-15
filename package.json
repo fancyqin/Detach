@@ -1,17 +1,15 @@
 {
-  "name": "nview-render",
+  "name": "summers-render",
   "version": "0.0.1",
-  "description": "nview-render package",
-  "main": "NViewRender.js",
+  "description": "summers-render package",
+  "main": "SummersRender.js",
   "dependencies": {
     "art-template": "^4.12.2",
     "dot": "^1.1.2",
-    "dustjs-linkedin": "^2.7.5",
     "ejs": "^2.5.7",
     "handlebars": "^4.0.11",
     "lodash": "^4.17.4",
-    "pug": "^2.0.0-rc.4",
-    "swig": "^1.4.2"
+    "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "consolidate": "^0.15.0",
@@ -20,5 +18,5 @@
     "swig-templates": "^2.0.2"
   },
   "author": "qinfan",
-  "license": "ISC"
+  "license": "MIT"
 }

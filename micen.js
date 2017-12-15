@@ -1,12 +1,12 @@
 const fs = require('fs');
-const NViewRender = require('./NViewRender.js');
+const SummersRender = require('./SummersRender.js');
 
 const data = JSON.parse(fs.readFileSync(__dirname+'/data/repositories.json'));
 
 //micen配置
-const micenRenderConfig = {defaultEngine:'pug',path:'F:\\Detach/static/view'};
+const micenRenderConfig = {defaultEngine:'pug',path:'F:\\nview-render/static/view'};
 
-const micenRender = new NViewRender(micenRenderConfig);
+const micenRender = new SummersRender(micenRenderConfig);
 
 micenRender.beforeEngineCompile = function(type,str,data){
     data.total_count = 123456789;
@@ -34,6 +34,7 @@ micenRender.compileByUri(data,'/page/home').then(result => {
 try {
     console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
     console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
+    console.log(micenRender.compileByUriSync(data,'/page/index.art'));
 }catch (e){
     console.error(e);
 }

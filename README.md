@@ -3,7 +3,7 @@
 ### require
 
 ```
-const NViewRender = require('nview-render');
+const SummersRender = require('summers-render');
 ```
 
 ### Config
@@ -44,7 +44,7 @@ const micenRenderConfig = {
     path:'F:\\mstatic/micen/view'
 }
 
-const micenRender = new NViewRender(micenRenderConfig);
+const micenRender = new SummersRender(micenRenderConfig);
 
 ```
 
@@ -125,14 +125,14 @@ micenRender.afterRender = function(htmlString){
 
 ### catch error
 
-`NViewRenderError{Object}`
+`SummersRenderError{Object}`
 
 `{code,msg,[e]}`
 
 code对应msg:
 
 - 100: Page should be a String
-- 200: Path Error,Cannot find file
+- 404: Path Error,Cannot find file
 - 300: Data error, It\'s not a JSON or Cannot be parsed to JSON
 - 400: Config error, Should be a Object
 - 500: Compile Error
