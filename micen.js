@@ -4,7 +4,7 @@ const SummersRender = require('./SummersRender.js');
 const data = JSON.parse(fs.readFileSync(__dirname+'/data/repositories.json'));
 
 //micen配置
-const micenRenderConfig = {defaultEngine:'pug',path:'F:\\nview-render/static/view'};
+const micenRenderConfig = {defaultEngine:'pug',path:'F:\\summers-render/static/view'};
 
 const micenRender = new SummersRender(micenRenderConfig);
 
@@ -25,7 +25,7 @@ micenRender.afterEngineCompile = function(htmlString){
 micenRender.compileByUri(data,'/page/home').then(result => {
     console.log(result)
 }).catch(e => {
-    console.error(e)
+    // console.error(e)
 });
 
 
@@ -34,7 +34,6 @@ micenRender.compileByUri(data,'/page/home').then(result => {
 try {
     console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
     console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
-    console.log(micenRender.compileByUriSync(data,'/page/index.art'));
 }catch (e){
-    console.error(e);
+    // console.error(e);
 }

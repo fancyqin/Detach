@@ -9,6 +9,7 @@ const ejs = require('ejs');
 const dot = require('dot');
 const handlebars = require('handlebars');
 
+const logger = require('./logger.js');
 /****
 error Code table
     100: Page error, Should be a String
@@ -27,6 +28,7 @@ class SummersRenderError {
         if(e){
             this.e = e
         }
+        logger.error(code,msg,e);
     }
 }
 
@@ -75,7 +77,9 @@ class SummersRender {
     }
     _getFileUri(page,compileConfig){
         if(typeof page !== 'string' ){
-            throw new SummersRenderError(100,'Page should be a String');
+            page = page.toString();
+            logger.error(page,'Page parameter error, must be a String');
+            // throw new SummersRenderError(100,'Page should be a String');
         }
         const extName = path.extname(compileConfig.path + page);
         let fileURI;
@@ -104,7 +108,9 @@ class SummersRender {
         try{
             return this._isObject(data) ? data : JSON.parse(data);
         }catch (e){
-            throw new SummersRenderError(300,'Data error, It\'s not a JSON or Cannot be parsed to JSON',e);
+            // throw new SummersRenderError(300,'Data error, It\'s not a JSON or Cannot be parsed to JSON',e);
+            logger.error(data,'Data parameter error, It is not a JSON or Cannot be parsed to JSON');
+            return {}
         }
     }
     compileByUri(data,page,config){
@@ -118,7 +124,9 @@ class SummersRender {
     }
     compileByUriSync(data,page,config){
         if(config && !this._isObject(config)){
-            throw new SummersRenderError(400,'Config error, Should be a Object')
+            // throw new SummersRenderError(400,'Config error, Should be a Object')
+            logger.error(config,'Config parameter error, Should be a Object');
+            config = null
         }
         const compileConfig = config? _.defaults(config,this.config):this.config;
         const fileURI  = this._getFileUri(page,compileConfig);
@@ -126,9 +134,10 @@ class SummersRender {
         const type = this._getEngineType(fileURI,compileConfig);
         const dataModel = this._getDataModel(data);
         try{
+            logger.info('Compile Success!',fileURI,'by',type)
             return this.compileByType(type,str,dataModel);
         }catch (e){
-            throw new SummersRenderError(500,'Compile Error',e)
+            return new SummersRenderError(500,'Compile Error',e)
         }
     }
 
