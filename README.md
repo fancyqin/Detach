@@ -131,8 +131,5 @@ micenRender.afterRender = function(htmlString){
 
 code对应msg:
 
-- 100: Page should be a String
 - 404: Path Error,Cannot find file
-- 300: Data error, It\'s not a JSON or Cannot be parsed to JSON
-- 400: Config error, Should be a Object
 - 500: Compile Error

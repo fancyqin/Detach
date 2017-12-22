@@ -81,15 +81,15 @@ class SummersRender {
             logger.error(page,'Page parameter error, must be a String');
             // throw new SummersRenderError(100,'Page should be a String');
         }
-        const extName = path.extname(compileConfig.path + page);
+        const extName = path.extname(path.join(compileConfig.path,page));
         let fileURI;
 
         if(extName === ''){
-            fileURI = compileConfig.path+ page +'.'+ compileConfig.defaultEngine;
+            fileURI = path.join(compileConfig.path,page +'.'+ compileConfig.defaultEngine);
         }else if(extName === '.'){
-            fileURI = compileConfig.path+ page + compileConfig.defaultEngine;
+            fileURI = path.join(compileConfig.path,page + compileConfig.defaultEngine);
         }else{
-            fileURI = compileConfig.path+ page
+            fileURI = path.join(compileConfig.path,page)
         }
         return fileURI;
     }
