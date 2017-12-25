@@ -134,8 +134,9 @@ class SummersRender {
         const type = this._getEngineType(fileURI,compileConfig);
         const dataModel = this._getDataModel(data);
         try{
-            logger.info('Compile Success!',fileURI,'by',type)
-            return this.compileByType(type,str,dataModel);
+            const resultString = this.compileByType(type,str,dataModel);
+            logger.info('Compile Success!',fileURI,'by',type);
+            return resultString;
         }catch (e){
             return new SummersRenderError(500,'Compile Error',e)
         }
