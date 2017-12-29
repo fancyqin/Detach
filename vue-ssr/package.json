@@ -13,6 +13,7 @@
   "author": "qinfan",
   "license": "MIT",
   "dependencies": {
+    "tesseract.js": "^1.0.10",
     "vue": "^2.5.13",
     "vue-server-renderer": "^2.5.13"
   }

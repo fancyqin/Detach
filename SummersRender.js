@@ -9,7 +9,7 @@ const ejs = require('ejs');
 const dot = require('dot');
 const handlebars = require('handlebars');
 
-const logger = require('./logger.js');
+const logger = require('./module/logger.js');
 /****
 error Code table
     100: Page error, Should be a String
