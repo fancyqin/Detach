@@ -8,10 +8,10 @@ const micenRenderConfig = {defaultEngine:'pug',path:'F:\\summers-render/static/v
 
 const micenRender = new SummersRender(micenRenderConfig);
 
-micenRender.beforeEngineCompile = function(type,str,data){
-    data.total_count = 123456789;
+// micenRender.beforeEngineCompile = function(type,str,data){
+//     data.total_count = 123456789;
 
-};
+// };
 micenRender.afterEngineCompile = function(htmlString){
     return htmlString + 'hahhahahah';
 };
@@ -31,9 +31,9 @@ micenRender.compileByUri(data,'/page/home').then(result => {
 
 
 //同步
-try {
-    console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
-    console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
-}catch (e){
-    // console.error(e);
-}
+// try {
+//     console.log(micenRender.compileByUriSync(data,'/page/productList',{defaultEngine:'ejs'}));
+//     console.log(micenRender.compileByUriSync(data,'/page/detail.jst'));
+// }catch (e){
+//     // console.error(e);
+// }
