@@ -12,9 +12,9 @@ const micenRender = new SummersRender(micenRenderConfig);
 //     data.total_count = 123456789;
 
 // };
-micenRender.afterEngineCompile = function(htmlString){
-    return htmlString + 'hahhahahah';
-};
+// micenRender.afterEngineCompile = function(htmlString){
+//     return htmlString + 'hahhahahah';
+// };
 //example
 
 
@@ -23,9 +23,21 @@ micenRender.afterEngineCompile = function(htmlString){
 
 //异步
 micenRender.compileByUri(data,'/page/home').then(result => {
-    console.log(result)
+    console.log('home: ',result)
 }).catch(e => {
-    // console.error(e)
+    console.error(e)
+});
+
+micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
+    console.log('list: ',result)
+}).catch(e => {
+    console.error(e)
+});
+
+micenRender.compileByUri(data,'/page/detail.jst').then(result => {
+    console.log('detail: '+result)
+}).catch(e => {
+    console.error(e)
 });
 
 

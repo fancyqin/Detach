@@ -33,7 +33,7 @@ const firstResolvePromise = (promises) =>{
     }
     )).then(
         errors => Promise.reject(errors),
-        values => Promise.resolve(val) 
+        values => Promise.resolve(values) 
     )
 }
 
@@ -142,7 +142,9 @@ class SummersRender {
 
         const compilePromsie = new Promise((resolve, reject) =>{
             try{
-                resolve(this.compileByUriSync(data,page,config))
+                setTimeout(()=>{
+                    resolve(this.compileByUriSync(data,page,config))
+                },2000)
             }catch(e){
                 reject(e);
             }
