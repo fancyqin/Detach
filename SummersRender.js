@@ -11,6 +11,7 @@ const handlebars = require('handlebars');
 
 const logger = require('./module/logger.js');
 const cache = require('./module/cache.js');
+const promiseRace = require('./module/promiseRace.js');
 
 /****
 error Code table
@@ -24,18 +25,9 @@ error Code table
 const defaults =  require('./SummersRenderConfig.js');
 
 
-const firstResolvePromise = (promises) =>{
-    return Promise.all(promises.map(p =>{
-        return p.then(
-            val => Promise.reject(val),
-            err => Promise.resolve(err)
-        );  
-    }
-    )).then(
-        errors => Promise.reject(errors),
-        values => Promise.resolve(values) 
-    )
-}
+
+
+
 
 class SummersRenderError {
     constructor(code,msg,e){
@@ -130,27 +122,30 @@ class SummersRender {
         }
     }
     compileByUri(data,page,config){
+        let beginTime = new Date();
+        
         const cachePromise = new Promise((resolve,reject) =>{
             try{
                 const compileConfig = config? _.defaults(config,this.config):this.config;
                 const fileURI  = this._getFileUri(page,compileConfig);
-                resolve(cache.getCache(data,fileURI))
+                const result = cache.getCache(data,fileURI);
+                console.log(page, 'cache cost: ',new Date() - beginTime,'ms')
+                resolve(result);               
             }catch(e){
                 reject(e)
             }
         })
-
         const compilePromsie = new Promise((resolve, reject) =>{
             try{
-                setTimeout(()=>{
-                    resolve(this.compileByUriSync(data,page,config))
-                },2000)
+                const result = this.compileByUriSync(data,page,config);
+                console.log(page, 'compile cost: ',new Date() - beginTime,'ms')
+                resolve(result);  
             }catch(e){
                 reject(e);
             }
         })
         
-        return firstResolvePromise([cachePromise,compilePromsie]);
+        return promiseRace([cachePromise,compilePromsie]);
     }
     compileByUriSync(data,page,config){
         if(config && !this._isObject(config)){

@@ -27,6 +27,12 @@ const renderCache = {
             json = {};
         }
         json[mdkey] = string;
+
+        //最多缓存20条数据。
+        if(Object.getOwnPropertyNames(json).length > 20){
+            delete json[Object.keys(json)[0]]
+        }
+
         fs.writeFile(cacheFilePath,JSON.stringify(json),(err) =>{
             if(err) {
                 console.error(err);

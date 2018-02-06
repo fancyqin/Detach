@@ -9,7 +9,7 @@ const micenRenderConfig = {defaultEngine:'pug',path:'F:\\summers-render/static/v
 const micenRender = new SummersRender(micenRenderConfig);
 
 // micenRender.beforeEngineCompile = function(type,str,data){
-//     data.total_count = 123456789;
+//     data.total_count = 111111;
 
 // };
 // micenRender.afterEngineCompile = function(htmlString){
@@ -28,17 +28,17 @@ micenRender.compileByUri(data,'/page/home').then(result => {
     console.error(e)
 });
 
-micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
-    console.log('list: ',result)
-}).catch(e => {
-    console.error(e)
-});
+// micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
+//     console.log('list: ',result)
+// }).catch(e => {
+//     console.error(e)
+// });
 
-micenRender.compileByUri(data,'/page/detail.jst').then(result => {
-    console.log('detail: '+result)
-}).catch(e => {
-    console.error(e)
-});
+// micenRender.compileByUri(data,'/page/detail.jst').then(result => {
+//     console.log('detail: '+result)
+// }).catch(e => {
+//     console.error(e)
+// });
 
 
 
