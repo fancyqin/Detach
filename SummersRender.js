@@ -10,8 +10,8 @@ const dot = require('dot');
 const handlebars = require('handlebars');
 
 const logger = require('./module/logger.js');
-const cache = require('./module/cache.js');
-const promiseRace = require('./module/promiseRace.js');
+// const cache = require('./module/cache.js');
+// const promiseRace = require('./module/promiseRace.js');
 
 /****
 error Code table
@@ -48,7 +48,7 @@ class SummersRender {
     constructor(config){
         this.config =  _.defaults(config,defaults);
     }
-    compileByType(tplType,str,data){
+    compileByType(tplType,str,data,configs){
         const compileParams = {tplType,str,data};
         const compileObj = _.defaults(this.beforeEngineCompile(tplType,str,data),compileParams);
         tplType = compileObj.tplType;
@@ -60,7 +60,8 @@ class SummersRender {
         }
         switch (tplType.toLowerCase()){
             case 'ejs':
-                htmlString = ejs.render(str,data);
+                let ejsOptions = configs['ejs_options'];
+                htmlString = ejs.render(str,data,ejsOptions);
                 break;
             case 'dot':
                 let render = dot.template(str);
@@ -77,7 +78,8 @@ class SummersRender {
                 htmlString = template(data);
                 break;
             default:
-                htmlString = ejs.render(str,data);
+                let options = configs['ejs_options'];
+                htmlString = ejs.render(str,data,options);
                 break;
         }
         htmlString = this.afterEngineCompile(htmlString);
@@ -122,30 +124,31 @@ class SummersRender {
         }
     }
     compileByUri(data,page,config){
-        let beginTime = new Date();
+        // let beginTime = new Date();
         
-        const cachePromise = new Promise((resolve,reject) =>{
-            try{
-                const compileConfig = config? _.defaults(config,this.config):this.config;
-                const fileURI  = this._getFileUri(page,compileConfig);
-                const result = cache.getCache(data,fileURI);
-                console.log(page, 'cache cost: ',new Date() - beginTime,'ms')
-                resolve(result);               
-            }catch(e){
-                reject(e)
-            }
-        })
+        // const cachePromise = new Promise((resolve,reject) =>{
+        //     try{
+        //         const compileConfig = config? _.defaults(config,this.config):this.config;
+        //         const fileURI  = this._getFileUri(page,compileConfig);
+        //         const result = cache.getCache(data,fileURI);
+        //         console.log(page, 'cache cost: ',new Date() - beginTime,'ms')
+        //         resolve(result);               
+        //     }catch(e){
+        //         reject(e)
+        //     }
+        // })
         const compilePromsie = new Promise((resolve, reject) =>{
             try{
                 const result = this.compileByUriSync(data,page,config);
-                console.log(page, 'compile cost: ',new Date() - beginTime,'ms')
+                // console.log(page, 'compile cost: ',new Date() - beginTime,'ms')
                 resolve(result);  
             }catch(e){
                 reject(e);
             }
         })
         
-        return promiseRace([cachePromise,compilePromsie]);
+        // return promiseRace([cachePromise,compilePromsie]);
+        return compilePromsie;
     }
     compileByUriSync(data,page,config){
         if(config && !this._isObject(config)){
@@ -159,9 +162,9 @@ class SummersRender {
         const type = this._getEngineType(fileURI,compileConfig);
         const dataModel = this._getDataModel(data);
         try{
-            const resultString = this.compileByType(type,str,dataModel);
+            const resultString = this.compileByType(type,str,dataModel,compileConfig);
             logger.info('Compile Success!',fileURI,'by',type);
-            cache.setCache(data,fileURI,resultString);
+            // cache.setCache(data,fileURI,resultString);
             return resultString;
         }catch (e){
             return new SummersRenderError(500,'Compile Error',e)

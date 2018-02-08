@@ -13,5 +13,6 @@ module.exports = {
     },
     "application":"vo",
     "version":"1.0.0",
-    "path":"view"
+    "path":"view",
+    "ejs_options": null
   }

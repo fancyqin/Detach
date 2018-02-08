@@ -26,6 +26,7 @@ const SummersRender = require('summers-render');
   "application":"vo",     //暂不用
   "version":"1.0.0",      //暂不用
   "path":"view"           //view文件根目录(绝对路径)  
+  "ejs_options": null     //ejs 编译配置项
 }
 
 ```
