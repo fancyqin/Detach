@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const _ = require('lodash');
+// const _ = require('lodash');
 
 
 const art = require('art-template');
@@ -46,11 +46,11 @@ class SummersRender {
         return Object.prototype.toString.call(data).toLowerCase() === '[object object]'
     }
     constructor(config){
-        this.config =  _.defaults(config,defaults);
+        this.config =  Object.assign(defaults,config);
     }
     compileByType(tplType,str,data,configs){
         const compileParams = {tplType,str,data};
-        const compileObj = _.defaults(this.beforeEngineCompile(tplType,str,data),compileParams);
+        const compileObj = Object.assign(compileParams,this.beforeEngineCompile(tplType,str,data));
         tplType = compileObj.tplType;
         str = compileObj.str;
         data = compileObj.data;
@@ -156,7 +156,7 @@ class SummersRender {
             logger.error(config,'Config parameter error, Should be a Object');
             config = null
         }
-        const compileConfig = config? _.defaults(config,this.config):this.config;
+        const compileConfig = config? Object.assign(this.config,config):this.config;
         const fileURI  = this._getFileUri(page,compileConfig);
         const str = this._getFileStr(fileURI);
         const type = this._getEngineType(fileURI,compileConfig);

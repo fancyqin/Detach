@@ -28,17 +28,17 @@ micenRender.compileByUri(data,'/page/home').then(result => {
     console.error(e)
 });
 
-// micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
-//     console.log('list: ',result)
-// }).catch(e => {
-//     console.error(e)
-// });
+micenRender.compileByUri(data,'/page/productList',{defaultEngine:'ejs'}).then(result => {
+    console.log('list: ',result)
+}).catch(e => {
+    console.error(e)
+});
 
-// micenRender.compileByUri(data,'/page/detail.jst').then(result => {
-//     console.log('detail: '+result)
-// }).catch(e => {
-//     console.error(e)
-// });
+micenRender.compileByUri(data,'/page/detail.jst').then(result => {
+    console.log('detail: '+result)
+}).catch(e => {
+    console.error(e)
+});
 
 
 
