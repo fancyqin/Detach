@@ -48,7 +48,7 @@ class SummersRender {
     constructor(config){
         this.config =  Object.assign(defaults,config);
     }
-    compileByType(tplType,str,data,configs){
+    compileByType(tplType,str,data,configs,fileURI){
         const compileParams = {tplType,str,data};
         const compileObj = Object.assign(compileParams,this.beforeEngineCompile(tplType,str,data));
         tplType = compileObj.tplType;
@@ -60,7 +60,8 @@ class SummersRender {
         }
         switch (tplType.toLowerCase()){
             case 'ejs':
-                let ejsOptions = configs['ejs_options'];
+                let ejsOptions = configs['ejs_options'] || {};
+                ejsOptions.filename = fileURI;
                 htmlString = ejs.render(str,data,ejsOptions);
                 break;
             case 'dot':
@@ -79,6 +80,7 @@ class SummersRender {
                 break;
             default:
                 let options = configs['ejs_options'];
+                options['filename'] = fileURI;
                 htmlString = ejs.render(str,data,options);
                 break;
         }
@@ -162,7 +164,7 @@ class SummersRender {
         const type = this._getEngineType(fileURI,compileConfig);
         const dataModel = this._getDataModel(data);
         try{
-            const resultString = this.compileByType(type,str,dataModel,compileConfig);
+            const resultString = this.compileByType(type,str,dataModel,compileConfig,fileURI);
             logger.info('Compile Success!',fileURI,'by',type);
             // cache.setCache(data,fileURI,resultString);
             return resultString;
