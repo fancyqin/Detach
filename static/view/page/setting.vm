@@ -1,0 +1,253 @@
+#set($isAdd = ${installmentDetailVo.isAdd()})
+#set($isEdit = ${installmentDetailVo.isEdit()})
+#set($isChina=$!{localeTool.isLocaleChina()})
+#set($buyerBusiIdStr=$!{encryptTool.encode($!{installmentDetailVo.buyerBusiId})})
+#set($isByOrder = ${installmentDetailVo.isSettlementByOrder()})
+#if($isAdd)
+	#set($layout="main_no_sider.vm")
+#else
+	#set($layout="main.vm")
+#end
+
+
+#define($css)
+    #mstatic('<link rel="stylesheet" href="Venice/css/installment/order_installment.css">')
+#end
+<div class="vo-main-wrap">
+	#if($CollectionTool.isNotEmpty($bindingErrorList))
+		#foreach($error in $bindingErrorList)
+		<div class="m-alert">
+			<div class="alert-con alert-err alert-state alert-full-col">
+				<span class="micon-state"><i class="ob-icon icon-error"></i></span>
+				<span class="alert-txt">$!{error.getDefaultMessage()}</span>
+			</div>
+		</div>
+		#end
+	#end	
+    <div class="vo-main">
+        <div class="vo-main-title">
+            <div class="vo-main-title-text">
+					#if($isAdd)
+						#springMessage('installment.form.title.add')
+					#else
+						#springMessage('installment.form.title.edit')
+					#end
+            </div>
+        </div>
+        <div class="vo-block">
+			#if($isAdd)
+            <div class="r mb10"><a href="" target="_blank">#springMessageNoEscape('installment.form.instruction')</a></div>
+			#end
+            <form class="m-form m-form-horizontal-span-10 installment-edit-form" method="post" name="accountPeriodForm" action="/installment/operat/$!buyerBusiIdStr">
+                #token($request)
+				<input type="hidden" name="editType" value="$!{installmentDetailVo.editType}">
+				<input type="hidden" name="buyBusiIdStr" value="$!buyerBusiIdStr">
+				<div class="form-item">
+					##买家公司名称：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.buyerName')</label>
+                    <div class="form-fields">
+                        <input type="text" class="input-text disabled col-10" name="buyerName" value="$!{installmentDetailVo.buyerName}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+					##预付款比例：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.initialPayment')</label>
+                    <div class="form-fields">
+                        <select id="firstProp" name="initialPayment" select-css="col-4">
+							#foreach(${depositRate} in ${initialPaymentSelect})
+								#if($isAdd)
+									<option value="${depositRate.value}" #if(${depositRate.isDefault}) selected #end>$!{depositRate.desc}</option>
+								#else
+									<option value="${depositRate.value}" #if(${installmentDetailVo.initialPayment} == ${depositRate.value}) selected #end>$!{depositRate.desc}</option>
+								#end
+							#end
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item">
+					##尾款比例：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.balancePayment')</label>
+                    <div class="form-fields">
+                        <select id="lastProp" name="balancePayment" select-css="col-4">
+                            #foreach(${depositRate} in ${balancePaymentSelect})
+								#if($isAdd)
+									<option value="${depositRate.value}" #if(${depositRate.isDefault}) selected #end>$!{depositRate.desc}</option>
+								#else
+									<option value="${depositRate.value}" #if(${installmentDetailVo.balancePayment} == ${depositRate.value}) selected #end>$!{depositRate.desc}</option>
+								#end
+							#end
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item">
+					##账期结算方式：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.settlementType')</label>
+                    <div class="form-fields">
+                        <select id="settleType" name="settlementType" select-css="col-6">
+                            #foreach(${selectOpion} in ${settlementTypeSelect})
+								#if($isAdd)
+									<option value="${selectOpion.value}" #if(${selectOpion.isDefault}) selected #end>
+											#showSelectDesc($selectOpion)
+									</option>
+								#else
+									<option value="${selectOpion.value}" #if(${installmentDetailVo.settlementType} == ${selectOpion.value}) selected #end>
+											#showSelectDesc($selectOpion)
+									</option>
+								#end
+							#end
+                        </select>
+                    </div>
+                </div>
+                <!--按订单结算-->
+                <div id="settleByOrder" class="" #if(!$isByOrder) style="display: none" #end>
+                    <div class="form-item">
+						##尾款参照节点：
+                        <label class="form-label"><em class="must">*</em>#springMessage('installment.form.timeNodeBP')</label>
+                        <div class="form-fields">
+                            <select name="timeNodeBP" select-css="col-6" #if(!$isByOrder) disabled #end>
+                                #foreach(${selectOpion} in ${timeNodeBPOrderSelect})
+									#if($isAdd)
+										<option value="${selectOpion.value}" #if(${selectOpion.isDefault}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#else
+										<option value="${selectOpion.value}" #if(${installmentDetailVo.timeNodeBP} == ${selectOpion.value}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#end
+								#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item">
+						##尾款账期（天）：
+                        <label class="form-label"><em class="must">*</em>#springMessage('installment.form.periodBP')</label>
+                        <div class="form-fields">
+                            <select id="lastCashDays" name="periodBP" select-css="col-4">
+                                #foreach(${selectOpion} in ${periodBPSSelect})
+									#if($isAdd)
+										<option value="${selectOpion.value}" #if(${selectOpion.isDefault}) selected #end>#showSelectDesc($selectOpion)</option>
+									#else
+										<option value="${selectOpion.value}" #if(${installmentDetailVo.periodBP} == ${selectOpion.value}) selected #end>#showSelectDesc($selectOpion)</option>
+									#end
+								#end
+                            </select>
+							##请填写1~360之间的整数。
+                            <input name="periodBPOther" placeholder="#springMessage('installment.form.periodBP.placeholder')" type="text" class="input-text other-cashday J-otherLastCashDay col-6 #if(!$!{installmentDetailVo.isPeriodBPOtherSelected()}) hide #end #if(!$isByOrder) ignore #end " value="$!{installmentDetailVo.periodBPOther}">
+                        </div>
+                    </div>
+                </div>
+                <!--按周期结算-->
+                <div id="settleByPeriod" class="" #if($isByOrder) style="display: none" #end>
+                    <div class="form-item">
+						##尾款结算周期：
+                        <label class="form-label"><em class="must">*</em>#springMessage('installment.form.periodicityBS')</label>
+                        <div class="form-fields">
+                            <select name="periodicityBS" class="ignore" select-css="col-6">
+                                #foreach(${selectOpion} in ${periodicityBSSelect})
+									#if($isAdd)
+										<option value="${selectOpion.value}" #if(${selectOpion.isDefault}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#else
+										<option value="${selectOpion.value}" #if(${installmentDetailVo.periodicityBS} == ${selectOpion.value}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#end
+								#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item">
+						##尾款参照节点：
+                        <label class="form-label"><em class="must">*</em>#springMessage('installment.form.timeNodeBP')</label>
+                        <div class="form-fields">
+                            <select name="timeNodeBP" select-css="col-6" #if($isByOrder) disabled #end>
+                                #foreach(${selectOpion} in ${timeNodeBPPeriodicitySelect})
+									
+									#if($isAdd)
+										<option value="${selectOpion.value}" #if(${selectOpion.isDefault}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#else
+										<option value="${selectOpion.value}" #if(${installmentDetailVo.timeNodeBP} == ${selectOpion.value}) selected #end>
+											#showSelectDesc($selectOpion)
+										</option>
+									#end
+								#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item">
+						##尾款结算日期（天）：
+                        <label class="form-label"><em class="must">*</em>#springMessage('installment.form.timeBP')</label>
+                        <div class="form-fields">
+							##请填写1~180之间的整数
+                            <input name="timeBP" type="text" class="input-text col-6 #if($isByOrder) ignore#end" placeholder="#springMessage('installment.form.timeBP.placeholder')" value="$!{installmentDetailVo.timeBP}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="installment-line"></div>
+                <div class="form-item">
+					##循环账期限额（US$）：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.maximumAmount')</label>
+                    <div class="form-fields">
+						##请填写7位以内的整数
+                        <input name="maximumAmount" type="text" class="input-text col-6" placeholder="#springMessage('installment.form.maximumAmount.placeholder')" value="$!{installmentDetailVo.maximumAmount}" maxlength="7">
+                    </div>
+                </div>
+                <div class="form-item">
+					##使用账期最低订单金额（US$）：
+                    <label class="form-label">#springMessage('installment.form.minimumOrderAmount')</label>
+                    <div class="form-fields">
+						##请填写4位以内的整数
+                        <input name="minimumOrderAmount" type="text" class="input-text col-6" placeholder="#springMessage('installment.form.minimumOrderAmount.placeholder')" value="$!{installmentDetailVo.minimumOrderAmount}" maxlength="4">
+                    </div>
+                </div>
+                <div class="form-item">
+					##账期有效截止日期：
+                    <label class="form-label"><em class="must">*</em>#springMessage('installment.form.expiryDate')</label>
+                    <div class="form-fields">
+						##请选择日期
+                        <input name="expiryDate" type="text" class="input-text J-orderDeadline col-6" placeholder="#springMessage('installment.form.expiryDate.placeholder')" readonly value="$!{installmentDetailVo.expiryDate}">
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-fields input-checkbox">
+                        <label class="input-wrap">
+                            <input name="protocol" type="checkbox" class="J-protocol" #if($isEdit) checked #end >
+							##我已阅读并同意<a target="_blank" href="">《账期协议》</a>	
+                            <span class="input-ctnr"></span>#springMessageNoEscape('installment.form.service.agree')
+                        </label>
+						##请阅读并勾选同意账期协议。
+                        <div class="feedback-block J-protocolError" style="display: none;" wrapfor="protocol"><label class="error">#springMessage('installment.form.service.notice')</label></div>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-fields">
+                        <button class="btn btn-main J-submitBtn mr10" #if($isAdd) disabled #end >#springMessage('installment.form.submit')</button>
+						#if($isEdit)
+						<a href="/installment" class="btn" >#springMessage('installment.form.cancle')</a>
+						#end
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+#define($js)
+    #mstatic('<script type="text/javascript" src="common/js/libs/jquery.js" charset="utf-8"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/libs/class.0.3.2.js" charset="utf-8"></script>')
+    #mstatic('<script type="text/javascript" src="Venice/js/global/global.js"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/libs/jquery/jquery.validate.silk.js"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/assets/template/template.js"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/assets/select2/select.js"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/assets/pikaDay/pikaday.2.0.0.js"></script>')
+    #mstatic('<script type="text/javascript" src="common/js/biz/bubble/bubble.js"></script>')
+
+    #mstatic('<script type="text/javascript" src="Venice/js/installment/order_installment_edit.js"></script>')
+#end

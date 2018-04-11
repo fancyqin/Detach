@@ -9,6 +9,8 @@ const ejs = require('ejs');
 const dot = require('dot');
 const handlebars = require('handlebars');
 
+const Velocity = require('velocityjs');
+
 const logger = require('./module/logger.js');
 // const cache = require('./module/cache.js');
 // const promiseRace = require('./module/promiseRace.js');
@@ -23,10 +25,6 @@ error Code table
 *****/
 
 const defaults =  require('./SummersRenderConfig.js');
-
-
-
-
 
 
 class SummersRenderError {
@@ -77,6 +75,11 @@ class SummersRender {
             case 'handlebars':
                 let template = handlebars.compile(str);
                 htmlString = template(data);
+                break;
+            case 'vm':
+                let Compile = Velocity.Compile;
+                let asts = Velocity.parse(str);
+                htmlString = (new Compile(asts)).render(data);
                 break;
             default:
                 let options = configs['ejs_options'];
